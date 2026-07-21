@@ -21,6 +21,7 @@ import {
   PrayerRequest,
   ChurchSettings,
 } from '../types';
+import { findDatabaseFile, downloadDatabaseFile, uploadDatabaseFile } from '../lib/googleDriveSync';
 
 // Default Church Settings
 const DEFAULT_SETTINGS: ChurchSettings = {
@@ -631,8 +632,97 @@ export class MockDatabase {
   private static setStored<T>(key: string, data: T) {
     localStorage.setItem(`church_cms_${key}`, JSON.stringify(data));
     this.saveToServer();
+    
+    // Background auto-sync to Google Drive if enabled and authenticated
     if (typeof window !== 'undefined') {
+      const autoSync = localStorage.getItem('gdrive_sync_auto') === 'true';
+      const token = sessionStorage.getItem('gdrive_access_token');
+      if (autoSync && token) {
+        this.syncWithGoogleDrive(token, 'push').catch((err) =>
+          console.error('Failed auto-sync to Google Drive:', err)
+        );
+      }
       window.dispatchEvent(new Event('church_db_updated'));
+    }
+  }
+
+  static async syncWithGoogleDrive(
+    accessToken: string,
+    direction: 'pull' | 'push'
+  ): Promise<{ success: boolean; message: string }> {
+    try {
+      const fileId = await findDatabaseFile(accessToken);
+
+      if (direction === 'pull') {
+        if (!fileId) {
+          return {
+            success: false,
+            message: 'File church_cms_database.json tidak ditemukan di Google Drive.',
+          };
+        }
+
+        const driveData = await downloadDatabaseFile(accessToken, fileId);
+        if (!driveData) {
+          return {
+            success: false,
+            message: 'Gagal membaca data dari Google Drive atau file kosong.',
+          };
+        }
+
+        // Save imported data into localStorage
+        Object.keys(driveData).forEach((key) => {
+          localStorage.setItem(`church_cms_${key}`, JSON.stringify(driveData[key]));
+        });
+
+        // Update server
+        await this.saveToServer();
+
+        if (this.onSyncCallback) {
+          this.onSyncCallback();
+        }
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new Event('church_db_updated'));
+        }
+
+        return {
+          success: true,
+          message: 'Berhasil mengunduh dan menyinkronkan seluruh database dari Google Drive!',
+        };
+      } else {
+        // direction === 'push'
+        const fullBackup = {
+          settings: this.getSettings(),
+          users: this.getUsers(),
+          announcements: this.getAnnouncements(),
+          news: this.getNews(),
+          devotions: this.getDevotions(),
+          events: this.getEvents(),
+          event_registrations: this.getEventRegistrations(),
+          gallery: this.getGallery(),
+          organizations: this.getOrganizations(),
+          ministries: this.getMinistries(),
+          congregations: this.getCongregations(),
+          comments: this.getComments(),
+          notifications: this.getNotifications(),
+          prayer_requests: this.getPrayerRequests(),
+        };
+
+        const newFileId = await uploadDatabaseFile(accessToken, fullBackup, fileId);
+        if (newFileId) {
+          localStorage.setItem('church_gdrive_file_id', newFileId);
+        }
+
+        return {
+          success: true,
+          message: 'Berhasil mengunggah dan mencadangkan seluruh database ke Google Drive!',
+        };
+      }
+    } catch (error: any) {
+      console.error('Google Drive sync error:', error);
+      return {
+        success: false,
+        message: `Kesalahan Sinkronisasi: ${error.message || error}`,
+      };
     }
   }
 

@@ -47,6 +47,11 @@ import {
   Role,
   User,
 } from '../types';
+import {
+  initGoogleDriveAuth,
+  signInWithGoogleDrive,
+  signOutGoogleDrive,
+} from '../lib/googleDriveSync';
 
 interface AdminModulesProps {
   activeTab: string;
@@ -115,6 +120,34 @@ export default function AdminModules({
     "prayer_requests",
     "gallery"
   ]);
+
+  // Google Drive Sync state
+  const [gdriveUser, setGdriveUser] = useState<any>(null);
+  const [gdriveToken, setGdriveToken] = useState<string | null>(null);
+  const [gdriveAutoSync, setGdriveAutoSync] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('gdrive_sync_auto') === 'true';
+    }
+    return false;
+  });
+  const [isSyncingGDrive, setIsSyncingGDrive] = useState(false);
+  const [gdriveSyncLogs, setGdriveSyncLogs] = useState<string[]>([]);
+
+  useEffect(() => {
+    const unsubscribe = initGoogleDriveAuth(
+      (user, token) => {
+        setGdriveUser(user);
+        setGdriveToken(token);
+        sessionStorage.setItem('gdrive_access_token', token);
+      },
+      () => {
+        setGdriveUser(null);
+        setGdriveToken(null);
+        sessionStorage.removeItem('gdrive_access_token');
+      }
+    );
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     loadAllData();
@@ -538,6 +571,83 @@ export default function AdminModules({
     } finally {
       setIsSyncingSheet(false);
     }
+  };
+
+  const handleConnectGDrive = async () => {
+    try {
+      const res = await signInWithGoogleDrive();
+      if (res) {
+        setGdriveUser(res.user);
+        setGdriveToken(res.accessToken);
+        setGdriveSyncLogs(prev => [...prev, `Terhubung ke: ${res.user.email}`]);
+        
+        setIsSyncingGDrive(true);
+        setGdriveSyncLogs(prev => [...prev, "Mengecek file database di Google Drive..."]);
+        const syncRes = await MockDatabase.syncWithGoogleDrive(res.accessToken, 'pull');
+        if (syncRes.success) {
+          setGdriveSyncLogs(prev => [...prev, "✔ Database ditemukan di Drive & berhasil dimuat ke lokal!"]);
+          loadAllData();
+          onSettingsSaved(MockDatabase.getSettings());
+        } else {
+          setGdriveSyncLogs(prev => [...prev, "Database belum ada di Drive. Mengunggah database lokal saat ini..."]);
+          const pushRes = await MockDatabase.syncWithGoogleDrive(res.accessToken, 'push');
+          if (pushRes.success) {
+            setGdriveSyncLogs(prev => [...prev, "✔ Berhasil mencadangkan database lokal ke Drive!"]);
+          } else {
+            setGdriveSyncLogs(prev => [...prev, `✖ Gagal mengunggah database lokal: ${pushRes.message}`]);
+          }
+        }
+      }
+    } catch (err: any) {
+      console.error(err);
+      setGdriveSyncLogs(prev => [...prev, `✖ Kesalahan: ${err.message || err}`]);
+    } finally {
+      setIsSyncingGDrive(false);
+    }
+  };
+
+  const handleDisconnectGDrive = async () => {
+    if (window.confirm("Apakah Anda yakin ingin memutuskan hubungan dengan Google Drive?")) {
+      await signOutGoogleDrive();
+      setGdriveUser(null);
+      setGdriveToken(null);
+      setGdriveSyncLogs(prev => [...prev, "Hubungan Google Drive diputuskan."]);
+    }
+  };
+
+  const handleGDriveSync = async (direction: 'pull' | 'push') => {
+    if (!gdriveToken) return;
+    const directionWord = direction === 'pull' ? 'MENGUNDUH (PULL)' : 'MENGUNGGAH (PUSH)';
+    const msg = direction === 'pull'
+      ? "Apakah Anda yakin ingin MENGUNDUH data dari Google Drive? Tindakan ini akan menimpa seluruh data lokal aplikasi Anda saat ini."
+      : "Apakah Anda yakin ingin MENGUNGGAH data ke Google Drive? Tindakan ini akan menimpa file database di Google Drive Anda.";
+
+    if (!window.confirm(msg)) return;
+
+    setIsSyncingGDrive(true);
+    setGdriveSyncLogs(prev => [...prev, `Memulai sinkronisasi: ${directionWord}...`]);
+    try {
+      const res = await MockDatabase.syncWithGoogleDrive(gdriveToken, direction);
+      if (res.success) {
+        setGdriveSyncLogs(prev => [...prev, `✔ ${res.message}`]);
+        loadAllData();
+        onSettingsSaved(MockDatabase.getSettings());
+        alert(res.message);
+      } else {
+        setGdriveSyncLogs(prev => [...prev, `✖ ${res.message}`]);
+        alert(res.message);
+      }
+    } catch (err: any) {
+      setGdriveSyncLogs(prev => [...prev, `✖ Gagal: ${err.message || err}`]);
+    } finally {
+      setIsSyncingGDrive(false);
+    }
+  };
+
+  const handleToggleAutoSync = (checked: boolean) => {
+    setGdriveAutoSync(checked);
+    localStorage.setItem('gdrive_sync_auto', String(checked));
+    setGdriveSyncLogs(prev => [...prev, `Sinkronisasi Otomatis ${checked ? 'diaktifkan' : 'dinonaktifkan'}.`]);
   };
 
   return (
@@ -1419,6 +1529,133 @@ export default function AdminModules({
 
               <button type="submit" className="w-full py-2.5 bg-brand text-white font-bold text-xs rounded-xl shadow-md cursor-pointer">Simpan Konfigurasi Pengaturan</button>
             </form>
+
+            {/* Google Drive Database Sync */}
+            <div className="bg-gradient-to-br from-indigo-50/80 to-blue-50/40 p-6 rounded-3xl border border-indigo-150 shadow-sm space-y-5">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2.5 text-indigo-900">
+                  <Database className="w-5 h-5 text-indigo-600" />
+                  <h4 className="font-display font-bold text-sm uppercase tracking-wide">SINKRONISASI DATABASE GOOGLE DRIVE</h4>
+                </div>
+                <span className="text-[10px] bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">
+                  Durable Cloud Storage
+                </span>
+              </div>
+
+              <div className="text-[11px] text-indigo-800 leading-relaxed space-y-2 bg-white/70 p-4 rounded-2xl border border-indigo-100/50">
+                <p className="font-bold uppercase tracking-wider text-[10px] text-indigo-900 mb-1">
+                  Integrasi Google Drive GKHK:
+                </p>
+                <p>
+                  Dengan fitur sinkronisasi ini, seluruh database gereja disimpan langsung ke dalam folder Google Drive pribadi Anda. Data akan tetap singkron secara real-time dan dapat diakses dari mana saja tanpa takut kehilangan perubahan.
+                </p>
+                <div className="p-2.5 bg-slate-50 border border-slate-200/60 rounded-xl flex items-center justify-between gap-2 mt-2">
+                  <div className="min-w-0 flex-1">
+                    <span className="block text-[9px] font-bold text-slate-400 uppercase">Folder Google Drive Tujuan</span>
+                    <a 
+                      href="https://drive.google.com/drive/folders/16VWtXcZV4LiGKUJ5mdVppKdhxjKjcPef?usp=sharing" 
+                      target="_blank" 
+                      rel="noreferrer" 
+                      className="text-[10px] font-semibold text-indigo-600 hover:underline truncate block"
+                    >
+                      https://drive.google.com/drive/folders/16VWtXcZV4LiGKUJ5mdVppKdhxjKjcPef?usp=sharing
+                    </a>
+                  </div>
+                  <span className="text-[9px] bg-slate-200 text-slate-700 p-1 px-2 rounded-lg font-mono">
+                    ID: 16VWtXcZV...
+                  </span>
+                </div>
+              </div>
+
+              {/* Status and Action Panel */}
+              <div className="p-4 rounded-2xl border bg-white shadow-sm">
+                {!gdriveUser ? (
+                  <div className="text-center py-4 space-y-3">
+                    <p className="text-xs text-slate-500 font-medium">Anda belum menghubungkan akun Google Drive untuk menyimpan database gereja.</p>
+                    <button
+                      type="button"
+                      onClick={handleConnectGDrive}
+                      disabled={isSyncingGDrive}
+                      className="mx-auto flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl transition-all active:scale-[0.98] shadow-md shadow-indigo-200 cursor-pointer"
+                    >
+                      <Upload className="w-4 h-4" /> Hubungkan Google Drive Saya
+                    </button>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></div>
+                        <div className="min-w-0">
+                          <p className="text-xs font-bold text-slate-800">Terhubung ke Google Drive</p>
+                          <p className="text-[10px] text-slate-400 truncate">{gdriveUser.email}</p>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={handleDisconnectGDrive}
+                        className="text-[10px] text-red-600 hover:text-red-700 hover:bg-red-50 p-1.5 px-3 rounded-lg font-bold border border-red-100 transition-all cursor-pointer"
+                      >
+                        Putuskan Hubungan
+                      </button>
+                    </div>
+
+                    {/* Auto-Sync Toggle */}
+                    <div className="flex items-center justify-between p-3 bg-slate-50 border border-slate-100 rounded-xl">
+                      <div>
+                        <p className="text-xs font-bold text-slate-700">Sinkronisasi Otomatis (Auto-Sync)</p>
+                        <p className="text-[9px] text-slate-400">Setiap perubahan data di aplikasi GKHK langsung tersimpan ke Google Drive Anda.</p>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={gdriveAutoSync}
+                          onChange={(e) => handleToggleAutoSync(e.target.checked)}
+                          className="sr-only peer"
+                        />
+                        <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600"></div>
+                      </label>
+                    </div>
+
+                    {/* Manual Sync Actions */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                      <button
+                        type="button"
+                        onClick={() => handleGDriveSync('pull')}
+                        disabled={isSyncingGDrive}
+                        className="flex items-center justify-center gap-2 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition-all cursor-pointer border border-slate-200"
+                      >
+                        <Download className="w-4 h-4 text-slate-500" /> Tarik Data Dari Drive (PULL)
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleGDriveSync('push')}
+                        disabled={isSyncingGDrive}
+                        className="flex items-center justify-center gap-2 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl transition-all cursor-pointer shadow-sm"
+                      >
+                        <Upload className="w-4 h-4" /> Dorong Data Ke Drive (PUSH)
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* GDrive Sync Logs */}
+              {gdriveSyncLogs.length > 0 && (
+                <div className="bg-slate-950 text-indigo-400 p-4 rounded-2xl font-mono text-[9px] border border-indigo-900/30 space-y-1 max-h-48 overflow-y-auto shadow-inner leading-normal">
+                  <p className="text-slate-500 font-bold uppercase tracking-wider text-[8px] border-b border-indigo-900/30 pb-1 mb-1.5 flex justify-between items-center">
+                    <span>LOG SINKRONISASI GOOGLE DRIVE</span>
+                    <button onClick={() => setGdriveSyncLogs([])} className="hover:text-white text-[8px] font-mono cursor-pointer uppercase">Clear</button>
+                  </p>
+                  {gdriveSyncLogs.map((log, index) => (
+                    <p key={index} className={log.includes("Gagal") || log.includes("Error") || log.includes("✖") ? "text-red-400 font-semibold" : ""}>
+                      {log.startsWith("✔") ? "✔ " : log.includes("Gagal") || log.includes("✖") ? "✖ " : "> "}
+                      {log}
+                    </p>
+                  ))}
+                </div>
+              )}
+            </div>
 
             {/* Divider */}
             <div className="border-t border-gray-100 my-8"></div>
