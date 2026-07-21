@@ -42,15 +42,49 @@ export default function App() {
   const [settings, setSettings] = useState<ChurchSettings>(MockDatabase.getSettings());
   const [allUsers, setAllUsers] = useState<UserType[]>(MockDatabase.getUsers());
   
-  // Current user state (defaults to Jemaat for easy exploration)
-  const [currentUser, setCurrentUser] = useState<UserType>(allUsers[2]); // Andi Wijaya (Jemaat)
+  // Current user state (attempt to restore from localStorage, fallback to Andi Wijaya (Jemaat))
+  const [currentUser, setCurrentUser] = useState<UserType>(() => {
+    try {
+      const storedUserId = localStorage.getItem('church_cms_user_id');
+      if (storedUserId) {
+        const users = MockDatabase.getUsers();
+        const found = users.find(u => u.id === storedUserId);
+        if (found) return found;
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    const users = MockDatabase.getUsers();
+    return users[2] || { id: 'jemaat-1', name: 'Andi Wijaya', email: 'jemaat@church.com', role: 'JEMAAT', avatarUrl: '' };
+  });
   
-  // Tab Routing State
-  const [currentTab, setTab] = useState<string>('jemaat_home');
-  const [darkMode, setDarkMode] = useState<boolean>(false);
+  // Tab Routing State (attempt to restore from localStorage)
+  const [currentTab, setTab] = useState<string>(() => {
+    try {
+      const storedTab = localStorage.getItem('church_cms_current_tab');
+      if (storedTab) return storedTab;
+    } catch {}
+    return 'jemaat_home';
+  });
   
-  // Login Lockscreen Simulation
-  const [isLocked, setIsLocked] = useState<boolean>(true);
+  const [darkMode, setDarkMode] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem('church_cms_dark_mode') === 'true';
+    } catch {
+      return false;
+    }
+  });
+  
+  // Login Lockscreen Simulation (attempt to restore active session)
+  const [isLocked, setIsLocked] = useState<boolean>(() => {
+    try {
+      const hasSession = localStorage.getItem('church_cms_session_active');
+      return hasSession !== 'true';
+    } catch {
+      return true;
+    }
+  });
+  
   const [loginEmail, setLoginEmail] = useState('jemaat@church.com');
   const [loginPassword, setLoginPassword] = useState('church123');
   const [selectedRoleGroup, setSelectedRoleGroup] = useState<'JEMAAT' | 'PELAYAN'>('JEMAAT');
@@ -60,6 +94,43 @@ export default function App() {
 
   // Toggle for demo credentials visibility
   const [showDemoCredentials, setShowDemoCredentials] = useState<boolean>(false);
+
+  // Sync state changes back to localStorage
+  useEffect(() => {
+    if (currentUser) {
+      try {
+        localStorage.setItem('church_cms_user_id', currentUser.id);
+      } catch (err) {
+        console.error('Failed to save user id to localStorage:', err);
+      }
+    }
+  }, [currentUser]);
+
+  useEffect(() => {
+    if (currentTab) {
+      try {
+        localStorage.setItem('church_cms_current_tab', currentTab);
+      } catch (err) {
+        console.error('Failed to save current tab to localStorage:', err);
+      }
+    }
+  }, [currentTab]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('church_cms_session_active', isLocked ? 'false' : 'true');
+    } catch (err) {
+      console.error('Failed to save session state to localStorage:', err);
+    }
+  }, [isLocked]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('church_cms_dark_mode', darkMode ? 'true' : 'false');
+    } catch (err) {
+      console.error('Failed to save dark mode to localStorage:', err);
+    }
+  }, [darkMode]);
 
   // Background Database Load and Sync Hook
   useEffect(() => {
