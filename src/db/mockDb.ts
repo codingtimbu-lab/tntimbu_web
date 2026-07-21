@@ -51,7 +51,7 @@ const DEFAULT_SETTINGS: ChurchSettings = {
   bankAccountName: 'GBI ROCK JUANDA',
   qrisUrl: 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=GBI_ROCK_JUANDA_OFFERING',
   adminWelcomeText: 'Selamat Datang, Pnt. Budi Santoso!',
-  adminSubText: 'Sistem Informasi Manajemen dan Pelayanan GKHK. Kelola berita, kustomisasi donasi, moderation komentar, and kelola jajaran organisasi secara instan.',
+  adminSubText: 'Sistem Informasi Manajemen dan Pelayanan CMS. Kelola berita, kustomisasi donasi, moderation komentar, and kelola jajaran organisasi secara instan.',
 };
 
 // Default Users for testing Role-Based Access Control
@@ -122,7 +122,7 @@ const DEFAULT_ANNOUNCEMENTS: Announcement[] = [
   {
     id: 'ann_2',
     title: 'Aksi Sosial Donor Darah & Pengobatan Gratis',
-    content: 'Komisi Pelayanan Sosial GKHK bekerja sama dengan Palang Merah Indonesia (PMI) akan mengadakan aksi sosial Donor Darah dan Pengobatan Gratis untuk warga sekitar gereja. Acara diadakan pada Sabtu, 25 Juli 2026 mulai pukul 08.00 - 13.00 WIB di Aula Serbaguna GKHK. Mari berpartisipasi!',
+    content: 'Komisi Pelayanan Sosial CMS bekerja sama dengan Palang Merah Indonesia (PMI) akan mengadakan aksi sosial Donor Darah dan Pengobatan Gratis untuk warga sekitar gereja. Acara diadakan pada Sabtu, 25 Juli 2026 mulai pukul 08.00 - 13.00 WIB di Aula Serbaguna CMS. Mari berpartisipasi!',
     priority: 'medium',
     category: 'Kegiatan Sosial',
     publishDate: '2026-07-18',
@@ -146,8 +146,8 @@ const DEFAULT_ANNOUNCEMENTS: Announcement[] = [
 const DEFAULT_NEWS: News[] = [
   {
     id: 'news_1',
-    title: 'Sukses Terlaksana: KKR Pemuda-Remaja GKHK 2026 Menarik Ratusan Peserta',
-    content: 'Kebaktian Kebangunan Rohani (KKR) Tahunan Pemuda dan Remaja GKHK sukses diselenggarakan pada hari Sabtu kemarin. Bertempat di Auditorium GKHK, KKR bertema "Shine Your Light" ini dihadiri oleh lebih dari 350 anak muda dari berbagai wilayah. Pembicara Pdt. Michael Yosef menyampaikan pesan yang membakar semangat pemuda untuk tetap berpegang teguh pada firman Tuhan di era digital yang penuh tantangan ini. Acara juga dimeriahkan oleh penampilan Youth Choir dan drama musikal spektakuler.',
+    title: 'Sukses Terlaksana: KKR Pemuda-Remaja CMS 2026 Menarik Ratusan Peserta',
+    content: 'Kebaktian Kebangunan Rohani (KKR) Tahunan Pemuda dan Remaja CMS sukses diselenggarakan pada hari Sabtu kemarin. Bertempat di Auditorium CMS, KKR bertema "Shine Your Light" ini dihadiri oleh lebih dari 350 anak muda dari berbagai wilayah. Pembicara Pdt. Michael Yosef menyampaikan pesan yang membakar semangat pemuda untuk tetap berpegang teguh pada firman Tuhan di era digital yang penuh tantangan ini. Acara juga dimeriahkan oleh penampilan Youth Choir dan drama musikal spektakuler.',
     category: 'Pemuda',
     coverUrl: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800&auto=format&fit=crop&q=80',
     author: 'Siti Rahmawati',
@@ -159,8 +159,8 @@ const DEFAULT_NEWS: News[] = [
   },
   {
     id: 'news_2',
-    title: 'GKHK Menyalurkan Bantuan Sosial untuk Korban Kebakaran Tambora',
-    content: 'Gereja Kristen Harapan Kasih melalui Komisi Diakonia dan Pelayanan Masyarakat bergerak cepat menyalurkan bantuan logistik darurat kepada korban bencana kebakaran di pemukiman padat penduduk Tambora, Jakarta Barat. Bantuan berupa bahan makanan pokok, pakaian layak pakai, selimut, air mineral, serta obat-obatan diserahkan langsung oleh perwakilan Majelis Jemaat kepada posko darurat setempat. Kami mengucapkan terima kasih yang sebesar-besarnya atas donasi materiil dan doa dari jemaat sekalian.',
+    title: 'CMS Menyalurkan Bantuan Sosial untuk Korban Kebakaran Tambora',
+    content: 'CMS (SYSTEM MANAGEMENT CHURCH) melalui Komisi Diakonia dan Pelayanan Masyarakat bergerak cepat menyalurkan bantuan logistik darurat kepada korban bencana kebakaran di pemukiman padat penduduk Tambora, Jakarta Barat. Bantuan berupa bahan makanan pokok, pakaian layak pakai, selimut, air mineral, serta obat-obatan diserahkan langsung oleh perwakilan Majelis Jemaat kepada posko darurat setempat. Kami mengucapkan terima kasih yang sebesar-besarnya atas donasi materiil dan doa dari jemaat sekalian.',
     category: 'Pelayanan Sosial',
     coverUrl: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=800&auto=format&fit=crop&q=80',
     author: 'Pnt. Budi Santoso',
@@ -214,7 +214,7 @@ const DEFAULT_EVENTS: ChurchEvent[] = [
     title: 'Seminar Hubungan Keluarga & Pasangan Bahagia 2026',
     content: 'Membangun keluarga Kristen yang harmonis, tangguh, dan berlandaskan kasih Kristus di tengah gempuran tren modern. Seminar ini menghadirkan pembicara pakar konseling keluarga kristen, Dr. Irwan Handoko & Dra. Maria Handoko. Sesi interaktif meliputi komunikasi suami-istri, mendidik anak di era digital, dan penyelesaian konflik keluarga dengan bijaksana.',
     bannerUrl: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=800&auto=format&fit=crop&q=80',
-    location: 'Aula Lt. 3 Gedung GKHK Jakarta',
+    location: 'Aula Lt. 3 Gedung CMS Jakarta',
     googleMapsUrl: 'https://maps.google.com',
     dateTime: '2026-08-15T09:00',
     countdownDate: '2026-08-15T09:00:00',
@@ -228,7 +228,7 @@ const DEFAULT_EVENTS: ChurchEvent[] = [
     title: 'Kebaktian KKR Pujian & Penyembahan (Worship Night)',
     content: 'Malam penyerahan diri dan penyembahan bersama seluruh jemaat. Bersiap mengalami hadirat Tuhan yang memulihkan melalui nyanyian pujian, doa syafaat bersama, serta firman yang meneguhkan. Acara ini terbuka untuk umum.',
     bannerUrl: 'https://images.unsplash.com/photo-1465847899084-d164df4dedc6?w=800&auto=format&fit=crop&q=80',
-    location: 'Main Sanctuary GKHK Jakarta',
+    location: 'Main Sanctuary CMS Jakarta',
     googleMapsUrl: 'https://maps.google.com',
     dateTime: '2026-07-28T19:00',
     countdownDate: '2026-07-28T19:00:00',
@@ -258,7 +258,7 @@ const DEFAULT_EVENT_REGISTRATIONS: EventRegistration[] = [
 const DEFAULT_GALLERY: Gallery[] = [
   {
     id: 'gal_1',
-    title: 'Keceriaan Kebaktian Sekolah Minggu (SM) GKHK',
+    title: 'Keceriaan Kebaktian Sekolah Minggu (SM) CMS',
     type: 'image',
     url: 'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?w=600&auto=format&fit=crop&q=80',
     category: 'Sekolah Minggu',
@@ -266,7 +266,7 @@ const DEFAULT_GALLERY: Gallery[] = [
   },
   {
     id: 'gal_2',
-    title: 'Pelayanan Paduan Suara Dewasa GKHK di Ibadah Raya',
+    title: 'Pelayanan Paduan Suara Dewasa CMS di Ibadah Raya',
     type: 'image',
     url: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600&auto=format&fit=crop&q=80',
     category: 'Ibadah Raya',
@@ -274,7 +274,7 @@ const DEFAULT_GALLERY: Gallery[] = [
   },
   {
     id: 'gal_3',
-    title: 'Video Dokumentasi Retreat Pemuda GKHK 2026',
+    title: 'Video Dokumentasi Retreat Pemuda CMS 2026',
     type: 'video',
     url: 'https://images.unsplash.com/photo-1465847899084-d164df4dedc6?w=600&auto=format&fit=crop&q=80', // placeholder thumbnail
     category: 'Pemuda',
@@ -298,7 +298,7 @@ const DEFAULT_ORGANIZATIONS: Organization[] = [
     photoUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80',
     period: 'Masa Bakti: 2020 - 2028',
     contact: 'samuel.wijaya@gkhk.or.id',
-    description: 'Bertanggung jawab penuh atas pelayanan kerohanian, penggembalaan, dan arah visi strategis pengajaran firman di GKHK Jakarta.',
+    description: 'Bertanggung jawab penuh atas pelayanan kerohanian, penggembalaan, dan arah visi strategis pengajaran firman di CMS Jakarta.',
     order: 1,
   },
   {
@@ -403,7 +403,7 @@ const DEFAULT_COMMENTS: Comment[] = [
     id: 'cmt_1',
     targetId: 'news_1',
     targetType: 'news',
-    targetTitle: 'Sukses Terlaksana: KKR Pemuda-Remaja GKHK 2026 Menarik Ratusan Peserta',
+    targetTitle: 'Sukses Terlaksana: KKR Pemuda-Remaja CMS 2026 Menarik Ratusan Peserta',
     userName: 'Andi Wijaya',
     userEmail: 'jemaat@church.com',
     userPhoto: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
@@ -416,7 +416,7 @@ const DEFAULT_COMMENTS: Comment[] = [
     id: 'cmt_2',
     targetId: 'news_1',
     targetType: 'news',
-    targetTitle: 'Sukses Terlaksana: KKR Pemuda-Remaja GKHK 2026 Menarik Ratusan Peserta',
+    targetTitle: 'Sukses Terlaksana: KKR Pemuda-Remaja CMS 2026 Menarik Ratusan Peserta',
     userName: 'Hendra Saputra',
     userEmail: 'hendra.saputra@gmail.com',
     content: 'Praise the Lord! Panitia sungguh bekerja luar biasa mempersiapkan sound, live, dan drama musikalnya. Ditunggu retreat gabungan berikutnya!',
@@ -431,7 +431,7 @@ const DEFAULT_COMMENTS: Comment[] = [
     targetTitle: 'Berjalan dalam Terang',
     userName: 'Merry Angriani',
     userEmail: 'merry.ang@gmail.com',
-    content: 'Renungan yang sangat menguatkan hati di hari Senin pagi yang sibuk ini. Terima kasih kepada tim penulis renungan gereja GKHK, Tuhan Yesus memberkati!',
+    content: 'Renungan yang sangat menguatkan hati di hari Senin pagi yang sibuk ini. Terima kasih kepada tim penulis renungan gereja CMS, Tuhan Yesus memberkati!',
     date: '2026-07-20T06:10:00',
     status: 'approved',
     likes: 15,
@@ -440,7 +440,7 @@ const DEFAULT_COMMENTS: Comment[] = [
     id: 'cmt_4',
     targetId: 'news_1',
     targetType: 'news',
-    targetTitle: 'Sukses Terlaksana: KKR Pemuda-Remaja GKHK 2026 Menarik Ratusan Peserta',
+    targetTitle: 'Sukses Terlaksana: KKR Pemuda-Remaja CMS 2026 Menarik Ratusan Peserta',
     userName: 'Spam Bot 2026',
     userEmail: 'spambot@malicious.com',
     content: 'DAPATKAN DISKON SEPATU OLAHRAGA TERBAIK HANYA HARI INI DI LINK KAMI!!! CHEAP SHOES HERE!',
@@ -454,7 +454,7 @@ const DEFAULT_NOTIFICATIONS: ChurchNotification[] = [
   {
     id: 'notif_1',
     title: 'Informasi Ibadah Paskah 2026',
-    content: 'Jadwal lengkap ibadah paskah GKHK telah dipublikasikan di menu Pengumuman. Segera cek detail jam pelayanan.',
+    content: 'Jadwal lengkap ibadah paskah CMS telah dipublikasikan di menu Pengumuman. Segera cek detail jam pelayanan.',
     targetGroup: 'all',
     sentDate: '2026-07-15T08:00:00',
     sentBy: 'admin@church.com',
@@ -516,7 +516,7 @@ const DEFAULT_ACTIVITY_LOGS: ActivityLog[] = [
     device: 'iPhone 15 Pro',
     date: '2026-07-19T14:30:00',
     status: 'success',
-    afterData: 'Judul: Sukses Terlaksana: KKR Pemuda-Remaja GKHK 2026',
+    afterData: 'Judul: Sukses Terlaksana: KKR Pemuda-Remaja CMS 2026',
   },
 ];
 
@@ -729,11 +729,11 @@ export class MockDatabase {
   static getSettings(): ChurchSettings {
     const settings = this.getStored('settings', DEFAULT_SETTINGS);
     // Force migration if the name is old or bank details are missing
-    if (settings.churchName === 'Gereja Kristen Harapan Kasih (GKHK)' || !settings.bankName) {
+    if (settings.churchName === 'CMS (SYSTEM MANAGEMENT CHURCH)' || !settings.bankName) {
       const migrated = {
         ...DEFAULT_SETTINGS,
         ...settings,
-        churchName: settings.churchName === 'Gereja Kristen Harapan Kasih (GKHK)' ? 'GBI ROCK JUANDA' : settings.churchName,
+        churchName: settings.churchName === 'CMS (SYSTEM MANAGEMENT CHURCH)' ? 'GBI ROCK JUANDA' : settings.churchName,
         bankName: settings.bankName || DEFAULT_SETTINGS.bankName,
         bankAccountNo: settings.bankAccountNo || DEFAULT_SETTINGS.bankAccountNo,
         bankAccountName: settings.bankAccountName || DEFAULT_SETTINGS.bankAccountName,

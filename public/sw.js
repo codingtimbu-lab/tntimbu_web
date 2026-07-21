@@ -75,13 +75,13 @@ self.addEventListener('fetch', (event) => {
 // Push Notification Receiver
 self.addEventListener('push', (event) => {
   console.log('[Service Worker] Push Received.');
-  let data = { title: 'GKHK Jakarta', body: 'Ada kabar baru hari ini di GKHK.' };
+  let data = { title: 'CMS Jakarta', body: 'Ada kabar baru hari ini di CMS.' };
 
   if (event.data) {
     try {
       data = event.data.json();
     } catch (e) {
-      data = { title: 'GKHK Jakarta', body: event.data.text() };
+      data = { title: 'CMS Jakarta', body: event.data.text() };
     }
   }
 

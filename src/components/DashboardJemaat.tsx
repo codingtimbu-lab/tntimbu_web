@@ -270,7 +270,7 @@ export default function DashboardJemaat({
       phone: eventRegPhone || '08123456789',
       registerDate: new Date().toISOString(),
       status: 'approved',
-      qrCodeUrl: `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=GKHK-REG-${regId}-${currentUser.name.replace(/\s+/g, '')}`,
+      qrCodeUrl: `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=CMS-REG-${regId}-${currentUser.name.replace(/\s+/g, '')}`,
       attended: false,
     };
 
@@ -323,7 +323,7 @@ export default function DashboardJemaat({
     setNewPrayer('');
     setIsPrivatePrayer(false);
     loadAllData();
-    alert('Permohonan doa Anda telah dikirimkan secara aman ke tim doa syafaat GKHK.');
+    alert('Permohonan doa Anda telah dikirimkan secara aman ke tim doa syafaat CMS.');
   };
 
   // Supporting prayer request count increment (Visual interactive like)
@@ -716,7 +716,7 @@ export default function DashboardJemaat({
         <div className="space-y-6 animate-fade-in">
           <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-4">
             <div>
-              <h2 className="font-display font-bold text-gray-800 text-lg">Jadwal Pelayanan & Ibadah GKHK</h2>
+              <h2 className="font-display font-bold text-gray-800 text-lg">Jadwal Pelayanan & Ibadah CMS</h2>
               <p className="text-xs text-gray-400">Jadwal Ibadah Raya Mingguan dan Kegiatan Persekutuan</p>
             </div>
 
@@ -790,7 +790,7 @@ export default function DashboardJemaat({
           {/* Google Maps & Location Block */}
           <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
             <div className="space-y-4">
-              <span className="bg-teal-50 text-brand px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Lokasi Fisik GKHK</span>
+              <span className="bg-teal-50 text-brand px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Lokasi Fisik CMS</span>
               <h3 className="font-display font-bold text-gray-800 text-lg">{settings.churchName}</h3>
               <p className="text-xs text-gray-500 leading-relaxed">{settings.address}</p>
               
@@ -815,7 +815,7 @@ export default function DashboardJemaat({
             {/* Embedded Iframe */}
             <div className="h-64 rounded-2xl overflow-hidden border border-gray-100 shadow-sm relative">
               <iframe
-                title="Google Maps GKHK"
+                title="Google Maps CMS"
                 src={settings.mapsEmbedUrl}
                 className="w-full h-full border-0"
                 allowFullScreen={true}
@@ -909,7 +909,7 @@ export default function DashboardJemaat({
       {activeTab === 'event' && (
         <div className="space-y-6 animate-fade-in">
           <div>
-            <h2 className="font-display font-bold text-gray-800 text-lg">Kegiatan & Event GKHK</h2>
+            <h2 className="font-display font-bold text-gray-800 text-lg">Kegiatan & Event CMS</h2>
             <p className="text-xs text-gray-400">Ikuti pertumbuhan rohani jemaat dengan mendaftarkan diri pada kegiatan yang diadakan gereja kami.</p>
           </div>
 
@@ -987,7 +987,7 @@ export default function DashboardJemaat({
       {activeTab === 'pelayanan' && (
         <div className="space-y-6 animate-fade-in">
           <div>
-            <h2 className="font-display font-bold text-gray-800 text-lg">Bidang Pelayanan Jemaat GKHK</h2>
+            <h2 className="font-display font-bold text-gray-800 text-lg">Bidang Pelayanan Jemaat CMS</h2>
             <p className="text-xs text-gray-400">Sambut panggilan pelayanan untuk memperlebar kerajaan Allah dengan terlibat di komisi jemaat.</p>
           </div>
 
@@ -1027,7 +1027,7 @@ export default function DashboardJemaat({
         <div className="space-y-6 animate-fade-in">
           <div className="text-center max-w-xl mx-auto space-y-2">
             <h2 className="font-display font-bold text-gray-800 text-xl">Struktur Majelis Jemaat & Pengurus Gereja</h2>
-            <p className="text-xs text-gray-400">Para hamba Tuhan yang melayani dalam penggembalaan dan tata kelola organisasi gereja GKHK.</p>
+            <p className="text-xs text-gray-400">Para hamba Tuhan yang melayani dalam penggembalaan dan tata kelola organisasi gereja CMS.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
@@ -1072,8 +1072,8 @@ export default function DashboardJemaat({
       {activeTab === 'galeri' && (
         <div className="space-y-6 animate-fade-in">
           <div>
-            <h2 className="font-display font-bold text-gray-800 text-lg">Dokumentasi & Galeri GKHK</h2>
-            <p className="text-xs text-gray-400">Mengabadikan sukacita persekutuan dan momen-momen pelayanan di GKHK.</p>
+            <h2 className="font-display font-bold text-gray-800 text-lg">Dokumentasi & Galeri CMS</h2>
+            <p className="text-xs text-gray-400">Mengabadikan sukacita persekutuan dan momen-momen pelayanan di CMS.</p>
           </div>
 
           {/* Lazy Loaded Grid structure */}
@@ -1128,7 +1128,7 @@ export default function DashboardJemaat({
                     {currentUser.name}
                   </h2>
                   <span className="bg-brand text-white text-[9px] font-black uppercase px-2.5 py-0.5 rounded-full border border-brand/30 w-max mx-auto md:mx-0">
-                    Jemaat GKHK
+                    Jemaat CMS
                   </span>
                 </div>
                 <p className="text-xs text-slate-400 font-medium">{currentUser.email}</p>
@@ -1164,7 +1164,7 @@ export default function DashboardJemaat({
               <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm space-y-4">
                 <div className="border-b border-gray-50 pb-3">
                   <h3 className="font-display font-bold text-gray-800 text-sm">Informasi Detail Keanggotaan</h3>
-                  <p className="text-[10px] text-gray-400">Data pribadi Anda yang terdaftar di database jemaat GKHK.</p>
+                  <p className="text-[10px] text-gray-400">Data pribadi Anda yang terdaftar di database jemaat CMS.</p>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
@@ -1216,7 +1216,7 @@ export default function DashboardJemaat({
                 <div className="border-b border-gray-50 pb-3 flex items-center justify-between">
                   <div>
                     <h3 className="font-display font-bold text-gray-800 text-sm">Tiket Event Saya ({registrations.filter(r => r.userId === currentUser.id).length})</h3>
-                    <p className="text-[10px] text-gray-400">Daftar keikutsertaan Anda dalam kegiatan dan seminar GKHK.</p>
+                    <p className="text-[10px] text-gray-400">Daftar keikutsertaan Anda dalam kegiatan dan seminar CMS.</p>
                   </div>
                   <button
                     onClick={() => setTab('jemaat_events')}
@@ -1277,7 +1277,7 @@ export default function DashboardJemaat({
                       <Church className="w-5 h-5 text-teal-400" />
                       <div className="leading-none">
                         <span className="text-[10px] font-black uppercase tracking-widest text-teal-400">KARTU ANGGOTA</span>
-                        <p className="text-[8px] font-semibold text-slate-300">GKHK PORTAL</p>
+                        <p className="text-[8px] font-semibold text-slate-300">CMS PORTAL</p>
                       </div>
                     </div>
                     <span className="text-[8px] bg-teal-500/10 text-teal-400 px-2 py-0.5 rounded font-bold font-mono">PWA LIVE</span>

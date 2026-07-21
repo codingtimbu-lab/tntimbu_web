@@ -106,7 +106,7 @@ export default function InstallPrompt() {
               <div className="flex-1">
                 <div className="flex items-center justify-between">
                   <h4 className="font-display font-bold text-gray-900 text-sm">
-                    Pasang Aplikasi GKHK
+                    Pasang Aplikasi CMS
                   </h4>
                   <button
                     onClick={dismissPrompt}
@@ -187,7 +187,7 @@ export default function InstallPrompt() {
                     <li>Buka menu browser Chrome dengan mengetuk ikon <strong className="text-teal-700">tiga titik vertikal (⋮)</strong> di kanan atas.</li>
                     <li>Cari dan pilih opsi <strong className="text-teal-700">"Instal Aplikasi"</strong> atau <strong className="text-teal-700">"Tambahkan ke Layar Utama" (Add to Home Screen)</strong>.</li>
                     <li>Ketuk <strong className="text-teal-700">"Instal"</strong> di dialog konfirmasi yang muncul.</li>
-                    <li>Aplikasi GKHK akan terpasang langsung di menu handphone Anda seperti aplikasi biasa!</li>
+                    <li>Aplikasi CMS akan terpasang langsung di menu handphone Anda seperti aplikasi biasa!</li>
                   </ol>
                 </div>
 

@@ -355,7 +355,7 @@ export default function AdminModules({
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(congs, null, 2));
     const dlAnchorElem = document.createElement('a');
     dlAnchorElem.setAttribute("href",     dataStr     );
-    dlAnchorElem.setAttribute("download", `Data_Jemaat_GKHK_${new Date().toISOString().split('T')[0]}.json`);
+    dlAnchorElem.setAttribute("download", `Data_Jemaat_CMS_${new Date().toISOString().split('T')[0]}.json`);
     dlAnchorElem.click();
     alert('Ekspor Berhasil! File JSON database jemaat terdownload (Kompatibel dengan sistem audit Kemenag/Sistem internal Excel).');
   };
@@ -428,7 +428,7 @@ export default function AdminModules({
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(backupStr);
     const dlAnchorElem = document.createElement('a');
     dlAnchorElem.setAttribute("href",     dataStr     );
-    dlAnchorElem.setAttribute("download", `Full_Backup_GKHK_DB_${Date.now()}.json`);
+    dlAnchorElem.setAttribute("download", `Full_Backup_CMS_DB_${Date.now()}.json`);
     dlAnchorElem.click();
     alert('Ekspor Full Database Berhasil!');
   };
@@ -674,7 +674,7 @@ export default function AdminModules({
               } else if (activeTab === 'admin_devotions') {
                 setEditingItem({ id: `dev_${Date.now()}`, title: '', content: '', scripture: 'Yohanes 3:16', category: 'Umum', coverUrl: 'https://images.unsplash.com/photo-1509021436665-8f07dbf5bf1d?w=400', publishDate: new Date().toISOString().split('T')[0] });
               } else if (activeTab === 'admin_events') {
-                setEditingItem({ id: `evt_${Date.now()}`, title: '', content: '', bannerUrl: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=400', location: 'GKHK Jakarta', dateTime: new Date().toISOString().slice(0, 16), countdownDate: new Date().toISOString(), quota: 100, registeredCount: 0, status: 'upcoming', isRegistrationOpen: true });
+                setEditingItem({ id: `evt_${Date.now()}`, title: '', content: '', bannerUrl: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=400', location: 'CMS Jakarta', dateTime: new Date().toISOString().slice(0, 16), countdownDate: new Date().toISOString(), quota: 100, registeredCount: 0, status: 'upcoming', isRegistrationOpen: true });
               } else if (activeTab === 'admin_congregation') {
                 setEditingItem({ id: `cong_${Date.now()}`, name: '', photoUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100', address: '', phone: '', email: '', isBaptized: true, isMarried: false, familyMembers: 'Lajang', commission: 'Pemuda', ministry: 'Praise Worship', joinDate: new Date().toISOString().split('T')[0] });
               } else if (activeTab === 'admin_users') {
@@ -1089,7 +1089,7 @@ export default function AdminModules({
                 <div className="p-4 bg-amber-50/10 border border-amber-100/40 rounded-2xl flex flex-col justify-between">
                   <div>
                     <h4 className="font-display font-bold text-gray-800 text-xs">Ekspor Database Jemaat</h4>
-                    <p className="text-[10px] text-gray-400">Download seluruh database jemaat GKHK dalam format file JSON/Excel terstruktur untuk kebutuhan cetak kartu atau pelaporan.</p>
+                    <p className="text-[10px] text-gray-400">Download seluruh database jemaat CMS dalam format file JSON/Excel terstruktur untuk kebutuhan cetak kartu atau pelaporan.</p>
                   </div>
                   <button onClick={handleExportCongregation} className="mt-3 w-max px-4 py-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs rounded-xl flex items-center gap-1.5 transition-colors">
                     <Download className="w-3.5 h-3.5" /> Ekspor ke Excel/JSON
@@ -1544,7 +1544,7 @@ export default function AdminModules({
 
               <div className="text-[11px] text-indigo-800 leading-relaxed space-y-2 bg-white/70 p-4 rounded-2xl border border-indigo-100/50">
                 <p className="font-bold uppercase tracking-wider text-[10px] text-indigo-900 mb-1">
-                  Integrasi Google Drive GKHK:
+                  Integrasi Google Drive CMS:
                 </p>
                 <p>
                   Dengan fitur sinkronisasi ini, seluruh database gereja disimpan langsung ke dalam folder Google Drive pribadi Anda. Data akan tetap singkron secara real-time dan dapat diakses dari mana saja tanpa takut kehilangan perubahan.
@@ -1604,7 +1604,7 @@ export default function AdminModules({
                     <div className="flex items-center justify-between p-3 bg-slate-50 border border-slate-100 rounded-xl">
                       <div>
                         <p className="text-xs font-bold text-slate-700">Sinkronisasi Otomatis (Auto-Sync)</p>
-                        <p className="text-[9px] text-slate-400">Setiap perubahan data di aplikasi GKHK langsung tersimpan ke Google Drive Anda.</p>
+                        <p className="text-[9px] text-slate-400">Setiap perubahan data di aplikasi CMS langsung tersimpan ke Google Drive Anda.</p>
                       </div>
                       <label className="relative inline-flex items-center cursor-pointer">
                         <input
@@ -1940,7 +1940,7 @@ export default function AdminModules({
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                   <h3 className="font-display font-bold text-gray-800 text-sm">Kelola Struktur Pengurus & Pelayan Firman</h3>
-                  <p className="text-xs text-gray-400">Atur jajaran majelis, penatua, diaken, dan pendeta pelayan jemaat GKHK.</p>
+                  <p className="text-xs text-gray-400">Atur jajaran majelis, penatua, diaken, dan pendeta pelayan jemaat CMS.</p>
                 </div>
                 {!editingItem && !isCreatingNew && (
                   <button
@@ -2146,7 +2146,7 @@ export default function AdminModules({
                         value={editingItem?.title || ''}
                         onChange={(e) => setEditingItem({ ...editingItem, title: e.target.value })}
                         className="w-full p-2 border border-gray-200 rounded-xl text-xs bg-white"
-                        placeholder="Contoh: Retreat Pemuda GKHK 2026"
+                        placeholder="Contoh: Retreat Pemuda CMS 2026"
                       />
                     </div>
                     <div>

@@ -146,13 +146,13 @@ export default function DashboardAdmin({ setTab, currentUser, settings }: Dashbo
         <div className="relative z-10 w-full flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <span className="bg-white/15 border border-white/25 px-3 py-1.5 rounded-full text-[10px] font-extrabold uppercase tracking-widest text-white backdrop-blur-md">
-              Portal Admin {settings.churchName || 'GKHK Juanda'}
+              Portal Admin {settings.churchName || 'CMS Juanda'}
             </span>
             <h2 className="font-display font-black text-2xl md:text-3xl mt-2.5 tracking-tight text-white drop-shadow-sm">
               {settings.adminWelcomeText || `Selamat Datang, ${currentUser.name}!`}
             </h2>
             <p className="text-xs text-slate-100/90 mt-1 max-w-xl leading-relaxed font-medium">
-              {settings.adminSubText || 'Sistem Informasi Manajemen dan Pelayanan GKHK. Kelola berita, kustomisasi donasi, moderation komentar, and kelola jajaran organisasi secara instan.'}
+              {settings.adminSubText || 'Sistem Informasi Manajemen dan Pelayanan CMS. Kelola berita, kustomisasi donasi, moderation komentar, and kelola jajaran organisasi secara instan.'}
             </p>
           </div>
           <button
