@@ -85,8 +85,8 @@ export default function App() {
     }
   });
   
-  const [loginEmail, setLoginEmail] = useState('jemaat@church.com');
-  const [loginPassword, setLoginPassword] = useState('church123');
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
   const [selectedRoleGroup, setSelectedRoleGroup] = useState<'JEMAAT' | 'PELAYAN'>('JEMAAT');
 
   // Mobile drawer state
@@ -240,179 +240,159 @@ export default function App() {
 
       <AnimatePresence>
         {isLocked ? (
-          /* Simulated Secure Login Screen */
+          /* Simulated Secure Login Screen - Beautifully Stacked Vertical Layout */
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex flex-col lg:flex-row bg-[#0B0F19] text-white font-sans overflow-hidden"
+            className="fixed inset-0 z-50 bg-[#070913] text-white font-sans overflow-y-auto"
           >
-            {/* COLUMN 1: LEFT PANEL (BRAND & GRADIENT INFO) */}
-            <div className="relative flex-1 hidden lg:flex flex-col justify-between p-12 bg-gradient-to-br from-[#1E2153] via-[#101438] to-[#0A0D29] overflow-hidden">
-              {/* Glowing Ambient Orbs */}
-              <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-[120px] pointer-events-none" />
-              <div className="absolute bottom-[-20%] left-[-10%] w-[400px] h-[400px] bg-purple-500/10 rounded-full blur-[100px] pointer-events-none" />
-              
-              {/* Brand Header */}
-              <div className="relative z-10 flex items-center gap-3.5">
-                <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center p-1.5 shadow-lg border border-white/10 overflow-hidden">
-                  <img src={settings.logoUrl} alt="Logo" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-                </div>
-                <div>
-                  <h1 className="font-display font-black text-white text-base tracking-wider uppercase leading-none">
-                    {settings.churchName}
-                  </h1>
-                  <p className="text-[10px] text-indigo-300 font-extrabold tracking-widest mt-1 uppercase">
-                    PORTAL JEMAAT & PELAYAN
-                  </p>
-                </div>
-              </div>
-
-              {/* Center Slogan Content */}
-              <div className="relative z-10 space-y-6 max-w-xl my-auto pt-12">
-                <div className="bg-[#EAB308]/15 text-[#FACC15] text-[10px] font-black tracking-widest px-3 py-1.5 rounded-full w-fit uppercase border border-[#FACC15]/20 shadow-sm">
-                  SELAMAT DATANG
-                </div>
+            <div className="min-h-screen w-full flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8">
+              <div className="w-full max-w-xl bg-[#0B0F19] rounded-3xl border border-slate-800/80 shadow-2xl overflow-hidden flex flex-col">
                 
-                <h2 className="text-4xl xl:text-5xl font-black text-white leading-tight uppercase tracking-tight">
-                  SATU PORTAL UNTUK<br />
-                  SELURUH JEMAAT &<br />
-                  PELAYAN GEREJA.
-                </h2>
-                
-                <p className="text-sm text-slate-300 leading-relaxed font-medium">
-                  Akses informasi ibadah raya, video khotbah, warta jemaat terbaru, daftar doa, pendaftaran RSVP acara, dan kas/donasi secara aman dan mudah.
-                </p>
-              </div>
-
-              {/* Footer */}
-              <div className="relative z-10 text-xs text-slate-400 font-medium">
-                © 2026 App. tn.timbu. Hak cipta dilindungi.
-              </div>
-            </div>
-
-            {/* COLUMN 2: RIGHT PANEL (PORTAL LOG IN FORM) */}
-            <div className="flex-1 flex flex-col items-center p-6 sm:p-10 lg:p-16 bg-[#0B0F19] relative overflow-y-auto w-full h-full">
-              
-              {/* Mobile Header Banner (only shown on small screens) */}
-              <div className="lg:hidden flex items-center gap-3 mb-8 w-full max-w-md bg-slate-900/40 p-4 rounded-2xl border border-slate-800">
-                <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center p-1 shadow overflow-hidden">
-                  <img src={settings.logoUrl} alt="Logo" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <h1 className="font-display font-black text-white text-sm tracking-wide uppercase truncate leading-none">
-                    {settings.churchName}
-                  </h1>
-                  <p className="text-[9px] text-indigo-400 font-bold tracking-wider mt-0.5 uppercase">
-                    PORTAL JEMAAT & PELAYAN
-                  </p>
-                </div>
-              </div>
-
-              <div className="w-full max-w-md space-y-7 relative z-10 my-auto py-8">
-                {/* Heading */}
-                <div className="space-y-1">
-                  <h3 className="text-3xl font-black text-white tracking-tight">
-                    PORTAL LOG IN
-                  </h3>
-                  <p className="text-xs text-slate-400 font-medium">
-                    Silakan pilih peran login Anda untuk melanjutkan.
-                  </p>
-                </div>
-
-                {/* Role Switcher Container (matching bordered box style in design) */}
-                <div className="border border-slate-850 rounded-xl p-1 bg-[#090D16] flex shadow-inner">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSelectedRoleGroup('JEMAAT');
-                      setLoginEmail('jemaat@church.com');
-                      setLoginPassword('church123');
-                    }}
-                    className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-[10px] sm:text-xs font-black uppercase tracking-wider transition-all cursor-pointer ${
-                      selectedRoleGroup === 'JEMAAT'
-                        ? 'bg-[#1E293B] text-indigo-400 border border-slate-700/80 shadow'
-                        : 'text-slate-400 hover:text-white'
-                    }`}
-                  >
-                    <Users className="w-4 h-4 text-indigo-400" />
-                    JEMAAT (MEMBER)
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSelectedRoleGroup('PELAYAN');
-                      setLoginEmail('admin@church.com');
-                      setLoginPassword('church123');
-                    }}
-                    className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-[10px] sm:text-xs font-black uppercase tracking-wider transition-all cursor-pointer ${
-                      selectedRoleGroup === 'PELAYAN'
-                        ? 'bg-[#1E293B] text-indigo-400 border border-slate-700/80 shadow'
-                        : 'text-slate-400 hover:text-white'
-                    }`}
-                  >
-                    <Briefcase className="w-4 h-4 text-purple-400" />
-                    PELAYAN (ADMIN/STAFF)
-                  </button>
-                </div>
-
-                {/* Form */}
-                <form onSubmit={handleLogin} className="space-y-5">
-                  <div className="space-y-1.5">
-                    <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-400">
-                      {selectedRoleGroup === 'JEMAAT' ? 'USERNAME JEMAAT *' : 'USERNAME PELAYAN *'}
-                    </label>
-                    <input
-                      type="email"
-                      required
-                      value={loginEmail}
-                      onChange={(e) => setLoginEmail(e.target.value)}
-                      placeholder={selectedRoleGroup === 'JEMAAT' ? 'Contoh: jemaat@church.com' : 'Contoh: admin@church.com'}
-                      className="w-full p-3.5 bg-slate-950 border border-slate-800 focus:border-indigo-500 focus:bg-[#0F172A] focus:ring-4 focus:ring-indigo-950/50 rounded-xl text-xs text-white placeholder-slate-500 font-medium transition-all outline-none"
-                    />
+                {/* TOP PORTION: PORTAL BRAND & INFO */}
+                <div className="relative p-8 sm:p-10 bg-gradient-to-br from-[#1E2153] via-[#101438] to-[#0A0D29] overflow-hidden border-b border-slate-800/60 flex flex-col">
+                  {/* Glowing Ambient Orbs */}
+                  <div className="absolute top-[-20%] right-[-10%] w-[350px] h-[350px] bg-indigo-500/15 rounded-full blur-[90px] pointer-events-none" />
+                  <div className="absolute bottom-[-30%] left-[-10%] w-[300px] h-[300px] bg-purple-500/15 rounded-full blur-[80px] pointer-events-none" />
+                  
+                  {/* Brand Header */}
+                  <div className="relative z-10 flex items-center gap-3.5">
+                    <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center p-1.5 shadow-lg border border-white/10 overflow-hidden">
+                      <img src={settings.logoUrl} alt="Logo" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                    </div>
+                    <div>
+                      <h1 className="font-display font-black text-white text-base tracking-wider uppercase leading-none">
+                        {settings.churchName}
+                      </h1>
+                      <p className="text-[10px] text-indigo-300 font-extrabold tracking-widest mt-1.5 uppercase">
+                        PORTAL JEMAAT & PELAYAN
+                      </p>
+                    </div>
                   </div>
 
-                  <div className="space-y-1.5">
-                    <div className="flex items-center justify-between">
-                      <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-400">
-                        SANDI / PASSWORD *
-                      </label>
+                  {/* Slogan Content */}
+                  <div className="relative z-10 space-y-4 mt-8">
+                    <div className="bg-[#EAB308]/15 text-[#FACC15] text-[10px] font-black tracking-widest px-3 py-1.5 rounded-full w-fit uppercase border border-[#FACC15]/20 shadow-sm">
+                      SELAMAT DATANG
+                    </div>
+                    
+                    <h2 className="text-2xl sm:text-3.5xl font-black text-white leading-tight uppercase tracking-tight">
+                      SATU PORTAL UNTUK<br />
+                      SELURUH JEMAAT & PELAYAN GEREJA.
+                    </h2>
+                    
+                    <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-medium">
+                      Akses informasi ibadah raya, video khotbah, warta jemaat terbaru, daftar doa, pendaftaran RSVP acara, dan kas/donasi secara aman dan mudah.
+                    </p>
+                  </div>
+                </div>
+
+                {/* BOTTOM PORTION: LOG IN FORM */}
+                <div className="p-8 sm:p-10 bg-[#0B0F19] w-full relative">
+                  <div className="space-y-6">
+                    {/* Heading */}
+                    <div className="space-y-1">
+                      <h3 className="text-2xl font-black text-white tracking-tight">
+                        PORTAL LOG IN
+                      </h3>
+                      <p className="text-xs text-slate-400 font-medium">
+                        Silakan pilih peran login Anda untuk melanjutkan.
+                      </p>
+                    </div>
+
+                    {/* Role Switcher Container */}
+                    <div className="border border-slate-800/80 rounded-xl p-1 bg-[#090D16] flex shadow-inner">
                       <button
                         type="button"
-                        onClick={() => alert('Gunakan sandi default "church123" untuk masuk.')}
-                        className="text-[10px] font-black uppercase text-indigo-400 hover:text-indigo-300 transition-colors cursor-pointer"
+                        onClick={() => {
+                          setSelectedRoleGroup('JEMAAT');
+                        }}
+                        className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-xs font-black uppercase tracking-wider transition-all cursor-pointer ${
+                          selectedRoleGroup === 'JEMAAT'
+                            ? 'bg-[#1E293B] text-indigo-400 border border-slate-700/80 shadow'
+                            : 'text-slate-400 hover:text-white'
+                        }`}
                       >
-                        LUPA PASSWORD?
+                        <Users className="w-4 h-4 text-indigo-400" />
+                        JEMAAT (MEMBER)
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSelectedRoleGroup('PELAYAN');
+                        }}
+                        className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-xs font-black uppercase tracking-wider transition-all cursor-pointer ${
+                          selectedRoleGroup === 'PELAYAN'
+                            ? 'bg-[#1E293B] text-indigo-400 border border-slate-700/80 shadow'
+                            : 'text-slate-400 hover:text-white'
+                        }`}
+                      >
+                        <Briefcase className="w-4 h-4 text-purple-400" />
+                        PELAYAN (ADMIN/STAFF)
                       </button>
                     </div>
-                    <input
-                      type="password"
-                      required
-                      value={loginPassword}
-                      onChange={(e) => setLoginPassword(e.target.value)}
-                      placeholder="••••••••"
-                      className="w-full p-3.5 bg-slate-950 border border-slate-800 focus:border-indigo-500 focus:bg-[#0F172A] focus:ring-4 focus:ring-indigo-950/50 rounded-xl text-xs text-white placeholder-slate-500 font-medium transition-all outline-none font-mono"
-                    />
+
+                    {/* Form */}
+                    <form onSubmit={handleLogin} className="space-y-5">
+                      <div className="space-y-1.5">
+                        <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                          {selectedRoleGroup === 'JEMAAT' ? 'USERNAME JEMAAT *' : 'USERNAME PELAYAN *'}
+                        </label>
+                        <input
+                          type="email"
+                          required
+                          value={loginEmail}
+                          onChange={(e) => setLoginEmail(e.target.value)}
+                          placeholder={selectedRoleGroup === 'JEMAAT' ? 'Contoh: jemaat@church.com' : 'Contoh: admin@church.com'}
+                          className="w-full p-3.5 bg-slate-950 border border-slate-800 focus:border-indigo-500 focus:bg-[#0F172A] focus:ring-4 focus:ring-indigo-950/50 rounded-xl text-xs text-white placeholder-slate-500 font-medium transition-all outline-none"
+                        />
+                      </div>
+
+                      <div className="space-y-1.5">
+                        <div className="flex items-center justify-between">
+                          <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                            SANDI / PASSWORD *
+                          </label>
+                          <button
+                            type="button"
+                            onClick={() => alert('Gunakan sandi default "church123" untuk masuk.')}
+                            className="text-[10px] font-black uppercase text-indigo-400 hover:text-indigo-300 transition-colors cursor-pointer"
+                          >
+                            LUPA PASSWORD?
+                          </button>
+                        </div>
+                        <input
+                          type="password"
+                          required
+                          value={loginPassword}
+                          onChange={(e) => setLoginPassword(e.target.value)}
+                          placeholder="••••••••"
+                          className="w-full p-3.5 bg-slate-950 border border-slate-800 focus:border-indigo-500 focus:bg-[#0F172A] focus:ring-4 focus:ring-indigo-950/50 rounded-xl text-xs text-white placeholder-slate-500 font-medium transition-all outline-none font-mono"
+                        />
+                      </div>
+
+                      <button
+                        type="submit"
+                        className="w-full py-4 bg-[#1D4ED8] hover:bg-blue-700 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-lg shadow-blue-600/20 active:scale-[0.99] transition-all flex items-center justify-center gap-2 cursor-pointer"
+                      >
+                        <LogIn className="w-4 h-4" />
+                        MASUK KE DASHBOARD
+                      </button>
+                    </form>
                   </div>
+                </div>
 
-                  <button
-                    type="submit"
-                    className="w-full py-4 bg-[#1D4ED8] hover:bg-blue-700 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-lg shadow-blue-600/20 active:scale-[0.99] transition-all flex items-center justify-center gap-2 cursor-pointer"
-                  >
-                    <LogIn className="w-4 h-4" />
-                    MASUK KE DASHBOARD
-                  </button>
-                </form>
+                {/* Windows Activation parody watermark perfectly matching the image */}
+                <div className="absolute bottom-6 right-6 text-right pointer-events-none opacity-20 select-none hidden sm:block">
+                  <p className="text-xs text-slate-400 font-light">Activate Windows</p>
+                  <p className="text-[10px] text-slate-500 font-light mt-0.5">Go to Settings to activate Windows.</p>
+                </div>
+
               </div>
 
-              {/* Windows Activation parody watermark perfectly matching the image */}
-              <div className="absolute bottom-6 right-6 text-right pointer-events-none opacity-20 select-none hidden sm:block">
-                <p className="text-xs text-slate-400 font-light">Activate Windows</p>
-                <p className="text-[10px] text-slate-500 font-light mt-0.5">Go to Settings to activate Windows.</p>
-              </div>
-
-              {/* Mobile Copyright */}
-              <div className="lg:hidden text-center text-[10px] text-slate-500 mt-8">
+              {/* Secure copyright info */}
+              <div className="mt-6 text-center text-[10px] text-slate-500">
                 © 2026 App. tn.timbu. Hak cipta dilindungi.
               </div>
             </div>
