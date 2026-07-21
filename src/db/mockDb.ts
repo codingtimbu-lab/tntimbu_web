@@ -69,6 +69,7 @@ const DEFAULT_USERS: User[] = [
     keluarga: 'Kepala Keluarga (Istri: Maria, Anak: Samuel)',
     pelayanan: 'Majelis Jemaat',
     joinDate: '2015-04-12',
+    password: 'church123',
   },
   {
     id: 'usr_admin',
@@ -82,8 +83,9 @@ const DEFAULT_USERS: User[] = [
     address: 'Kembangan, Jakarta Barat',
     komisi: 'Wanita',
     keluarga: 'Istri (Suami: Yusuf)',
-    pelayanan: 'Multimedia & Sekretariat',
+    pelayanan: 'Multimedia & Secretariat',
     joinDate: '2018-08-19',
+    password: 'church123',
   },
   {
     id: 'usr_jemaat',
@@ -99,6 +101,7 @@ const DEFAULT_USERS: User[] = [
     keluarga: 'Anak (Orang tua: Setiawan Wijaya)',
     pelayanan: 'Pemain Musik (Keyboard)',
     joinDate: '2020-01-05',
+    password: 'church123',
   },
 ];
 

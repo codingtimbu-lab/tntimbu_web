@@ -19,6 +19,7 @@ export interface User {
   keluarga?: string; // Nama Kepala Keluarga / Relasi
   pelayanan?: string; // Bidang pelayanan jika ada
   joinDate?: string;
+  password?: string;
 }
 
 export interface Announcement {

@@ -215,7 +215,8 @@ export default function App() {
     e.preventDefault();
     const matched = allUsers.find((u) => u.email.toLowerCase() === loginEmail.toLowerCase());
     if (matched) {
-      if (loginPassword === 'church123') {
+      const correctPassword = matched.password || 'church123';
+      if (loginPassword === correctPassword) {
         setCurrentUser(matched);
         setIsLocked(false);
         if (matched.role === 'SUPER_ADMIN' || matched.role === 'ADMIN') {
@@ -225,10 +226,10 @@ export default function App() {
         }
         MockDatabase.addLog(matched, 'LOGIN');
       } else {
-        alert('Kata sandi salah! Gunakan sandi default "church123" untuk masuk.');
+        alert('Kata sandi salah! Silakan coba lagi atau klik "LUPA PASSWORD" untuk menghubungi admin.');
       }
     } else {
-      alert('Alamat email tidak terdaftar! Gunakan salah satu akun demo yang tertera.');
+      alert('Alamat email tidak terdaftar! Silakan hubungi admin untuk mendaftarkan akun Anda.');
     }
   };
 
@@ -356,7 +357,9 @@ export default function App() {
                           </label>
                           <button
                             type="button"
-                            onClick={() => alert('Gunakan sandi default "church123" untuk masuk.')}
+                            onClick={() => {
+                              window.location.href = "mailto:tn.timbu@gmail.com?subject=Permohonan%20Atur%20Ulang%20Sandi%20Portal%20Gereja&body=Syalom%20Admin,%20saya%20lupa%20kata%20sandi%20login%20saya.%20Tolong%20bantu%20untuk%20mengecek%20atau%20mengatur%20ulang%20sandi%20saya.%250D%250ANama:%250D%250AEmail%20Login:";
+                            }}
                             className="text-[10px] font-black uppercase text-indigo-400 hover:text-indigo-300 transition-colors cursor-pointer"
                           >
                             LUPA PASSWORD?

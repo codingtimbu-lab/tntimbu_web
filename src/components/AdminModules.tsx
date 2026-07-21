@@ -45,6 +45,7 @@ import {
   Gallery,
   ChurchSettings,
   Role,
+  User,
 } from '../types';
 
 interface AdminModulesProps {
@@ -77,6 +78,7 @@ export default function AdminModules({
   const [ministries, setMinistries] = useState<Ministry[]>([]);
   const [orgs, setOrgs] = useState<Organization[]>([]);
   const [gallery, setGallery] = useState<Gallery[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
 
   // Editing forms state
   const [editingItem, setEditingItem] = useState<any>(null);
@@ -139,6 +141,7 @@ export default function AdminModules({
     setMinistries(MockDatabase.getMinistries());
     setOrgs(MockDatabase.getOrganizations());
     setGallery(MockDatabase.getGallery());
+    setUsers(MockDatabase.getUsers());
 
     if (selectedEventIdForRegistrants) {
       const regs = MockDatabase.getEventRegistrations();
@@ -242,6 +245,23 @@ export default function AdminModules({
   const handleDeleteCongregation = (id: string) => {
     if (confirm('Yakin ingin menghapus jemaat ini dari database?')) {
       MockDatabase.deleteCongregation(id, currentUser);
+      loadAllData();
+    }
+  };
+
+  // USER LOGIN CREDENTIAL ACTIONS
+  const handleSaveUser = (e: React.FormEvent) => {
+    e.preventDefault();
+    const item: User = editingItem;
+    MockDatabase.saveUser(item, currentUser);
+    setIsCreatingNew(false);
+    setEditingItem(null);
+    loadAllData();
+  };
+
+  const handleDeleteUser = (id: string) => {
+    if (confirm('Yakin ingin menghapus akun pengguna ini dari database?')) {
+      MockDatabase.deleteUser(id, currentUser);
       loadAllData();
     }
   };
@@ -442,6 +462,7 @@ export default function AdminModules({
       { id: 'admin_devotions', label: 'Kelola Renungan', visible: true },
       { id: 'admin_events', label: 'Kelola Event', visible: true },
       { id: 'admin_congregation', label: 'Data Jemaat', visible: true },
+      { id: 'admin_users', label: 'Kelola Akun & Sandi', visible: true },
       { id: 'admin_comments', label: 'Moderasi Komentar', visible: true },
       { id: 'admin_notifications', label: 'Kirim Notifikasi', visible: true },
       { id: 'admin_ministries', label: 'Kelola Pelayanan', visible: true },
@@ -531,7 +552,7 @@ export default function AdminModules({
         </div>
         
         {/* Dynamic add button for appropriate lists */}
-        {['admin_news', 'admin_announcements', 'admin_devotions', 'admin_events', 'admin_congregation'].includes(activeTab) && !editingItem && !isCreatingNew && (
+        {['admin_news', 'admin_announcements', 'admin_devotions', 'admin_events', 'admin_congregation', 'admin_users'].includes(activeTab) && !editingItem && !isCreatingNew && (
           <button
             onClick={() => {
               setIsCreatingNew(true);
@@ -546,6 +567,8 @@ export default function AdminModules({
                 setEditingItem({ id: `evt_${Date.now()}`, title: '', content: '', bannerUrl: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=400', location: 'GKHK Jakarta', dateTime: new Date().toISOString().slice(0, 16), countdownDate: new Date().toISOString(), quota: 100, registeredCount: 0, status: 'upcoming', isRegistrationOpen: true });
               } else if (activeTab === 'admin_congregation') {
                 setEditingItem({ id: `cong_${Date.now()}`, name: '', photoUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100', address: '', phone: '', email: '', isBaptized: true, isMarried: false, familyMembers: 'Lajang', commission: 'Pemuda', ministry: 'Praise Worship', joinDate: new Date().toISOString().split('T')[0] });
+              } else if (activeTab === 'admin_users') {
+                setEditingItem({ id: `usr_${Date.now()}`, email: '', name: '', role: 'JEMAAT', password: 'church123', phone: '', komisi: '', joinDate: new Date().toISOString().split('T')[0] });
               }
             }}
             className="px-4 py-2 bg-brand text-white font-bold text-xs rounded-xl hover:bg-brand-dark transition-colors flex items-center gap-1 shadow-sm"
@@ -738,6 +761,46 @@ export default function AdminModules({
                 </div>
               </div>
               <button type="submit" className="w-full py-2.5 bg-brand text-white font-bold text-xs rounded-xl">Simpan Anggota Jemaat</button>
+            </form>
+          )}
+
+          {activeTab === 'admin_users' && (
+            <form onSubmit={handleSaveUser} className="space-y-3">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-semibold text-gray-600">Nama Lengkap</label>
+                  <input type="text" required value={editingItem.name || ''} onChange={(e) => setEditingItem({ ...editingItem, name: e.target.value })} className="w-full p-2.5 bg-white border border-gray-200 rounded-xl text-xs outline-none focus:border-brand" />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-gray-600">Role / Hak Akses</label>
+                  <select value={editingItem.role || 'JEMAAT'} onChange={(e) => setEditingItem({ ...editingItem, role: e.target.value as Role })} className="w-full p-2.5 bg-white border border-gray-200 rounded-xl text-xs outline-none focus:border-brand">
+                    <option value="JEMAAT">JEMAAT (Member)</option>
+                    <option value="ADMIN">ADMIN (Staff/Pelayan)</option>
+                    <option value="SUPER_ADMIN">SUPER ADMIN (Pastor/Majelis)</option>
+                  </select>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-semibold text-gray-600">Email / Username Login</label>
+                  <input type="email" required value={editingItem.email || ''} onChange={(e) => setEditingItem({ ...editingItem, email: e.target.value })} className="w-full p-2.5 bg-white border border-gray-200 rounded-xl text-xs outline-none focus:border-brand" />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-gray-600">Kata Sandi / Password</label>
+                  <input type="text" required placeholder="Sandi login (contoh: church123)" value={editingItem.password || ''} onChange={(e) => setEditingItem({ ...editingItem, password: e.target.value })} className="w-full p-2.5 bg-white border border-gray-200 rounded-xl text-xs font-mono outline-none focus:border-brand" />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-semibold text-gray-600">No. Telepon / WhatsApp</label>
+                  <input type="tel" value={editingItem.phone || ''} onChange={(e) => setEditingItem({ ...editingItem, phone: e.target.value })} className="w-full p-2.5 bg-white border border-gray-200 rounded-xl text-xs outline-none focus:border-brand" />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-gray-600">Komisi Pelayanan / Bidang</label>
+                  <input type="text" placeholder="e.g., Pemuda, Multimedia, Majelis" value={editingItem.komisi || ''} onChange={(e) => setEditingItem({ ...editingItem, komisi: e.target.value })} className="w-full p-2.5 bg-white border border-gray-200 rounded-xl text-xs outline-none focus:border-brand" />
+                </div>
+              </div>
+              <button type="submit" className="w-full py-2.5 bg-brand text-white font-bold text-xs rounded-xl shadow-md cursor-pointer hover:bg-brand-dark transition-colors">Simpan Akun Pengguna</button>
             </form>
           )}
         </div>
@@ -938,6 +1001,50 @@ export default function AdminModules({
                     <div className="flex items-center gap-1.5">
                       <button onClick={() => setEditingItem(item)} className="p-2 bg-white hover:bg-teal-50 border border-gray-100 text-gray-500 rounded-xl"><Edit2 className="w-3.5 h-3.5" /></button>
                       <button onClick={() => handleDeleteCongregation(item.id)} className="p-2 bg-white hover:bg-red-50 border border-gray-100 text-gray-500 rounded-xl"><Trash2 className="w-3.5 h-3.5" /></button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Kelola Akun & Sandi List */}
+          {activeTab === 'admin_users' && (
+            <div className="space-y-4">
+              <div className="p-3.5 bg-indigo-50 text-indigo-900 border border-indigo-100 rounded-2xl flex items-start gap-2.5">
+                <AlertCircle className="w-4 h-4 text-indigo-600 flex-shrink-0 mt-0.5" />
+                <p className="text-[10px] leading-relaxed">
+                  Semua akun di bawah ini dapat digunakan untuk login ke portal jemaat maupun admin. Sebagai pengurus, Anda dapat memantau, merubah, dan melihat kata sandi masing-masing akun (Jemaat, Admin, Superadmin) demi kelancaran pelayanan.
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                {users.map((item) => (
+                  <div key={item.id} className="p-4 bg-gray-50/50 hover:bg-gray-50 border border-gray-100 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-colors">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-slate-200 border border-slate-300 flex items-center justify-center font-bold text-slate-700 uppercase">
+                        {item.name ? item.name.charAt(0) : '?'}
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <h4 className="font-semibold text-gray-800 text-xs">{item.name}</h4>
+                          <span className={`text-[8px] font-black uppercase px-2 py-0.5 rounded-full ${
+                            item.role === 'SUPER_ADMIN' ? 'bg-purple-100 text-purple-700' :
+                            item.role === 'ADMIN' ? 'bg-indigo-100 text-indigo-700' :
+                            'bg-slate-100 text-slate-700'
+                          }`}>
+                            {item.role}
+                          </span>
+                        </div>
+                        <div className="mt-1 flex flex-col gap-0.5 sm:flex-row sm:items-center sm:gap-4 text-[10px] text-gray-500">
+                          <span><strong>Email:</strong> {item.email}</span>
+                          <span><strong>Sandi:</strong> <code className="bg-slate-100 px-1.5 py-0.5 rounded text-amber-600 font-mono font-semibold">{item.password || 'church123'}</code></span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1.5 self-end sm:self-auto">
+                      <button onClick={() => setEditingItem(item)} className="p-2 bg-white hover:bg-blue-50 border border-gray-100 text-gray-500 hover:text-blue-600 hover:border-blue-200 rounded-xl transition-colors" title="Edit Akun"><Edit2 className="w-3.5 h-3.5" /></button>
+                      <button onClick={() => handleDeleteUser(item.id)} className="p-2 bg-white hover:bg-red-50 border border-gray-100 text-gray-500 hover:text-red-600 hover:border-red-200 rounded-xl transition-colors" title="Hapus Akun"><Trash2 className="w-3.5 h-3.5" /></button>
                     </div>
                   </div>
                 ))}
