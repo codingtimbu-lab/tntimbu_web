@@ -5,9 +5,9 @@
 
 const CACHE_NAME = 'church-cms-cache-v1';
 const ASSETS_TO_CACHE = [
-  '/',
-  '/index.html',
-  '/manifest.json',
+  './',
+  './index.html',
+  './manifest.json',
 ];
 
 // Install Event
@@ -65,7 +65,7 @@ self.addEventListener('fetch', (event) => {
           }
           // If index.html is in cache, return it for navigations
           if (event.request.mode === 'navigate') {
-            return caches.match('/');
+            return caches.match('./index.html') || caches.match('./');
           }
         });
       })
@@ -106,6 +106,6 @@ self.addEventListener('notificationclick', (event) => {
   console.log('[Service Worker] Notification click Received.');
   event.notification.close();
   event.waitUntil(
-    clients.openWindow('/')
+    clients.openWindow(self.registration.scope || './')
   );
 });

@@ -4,9 +4,11 @@ import App from './App.tsx';
 import './index.css';
 
 // Register Service Worker for PWA Support
-if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
+const swUrl = `${(import.meta as any).env.BASE_URL || './'}sw.js`.replace(/\/+/g, '/');
+
+if ('serviceWorker' in navigator && (import.meta as any).env.PROD) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js')
+    navigator.serviceWorker.register(swUrl)
       .then((registration) => {
         console.log('[PWA] Service Worker registered successfully:', registration.scope);
       })
@@ -17,7 +19,7 @@ if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
 } else if ('serviceWorker' in navigator) {
   // Register in dev mode too so PWA criteria can be tested easily
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js')
+    navigator.serviceWorker.register(swUrl)
       .then((registration) => {
         console.log('[PWA] Service Worker registered in Dev Mode:', registration.scope);
       })
