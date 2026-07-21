@@ -689,7 +689,7 @@ export default function AdminModules({
       </div>
 
       {/* FORM MODE */}
-      {editingItem && (
+      {editingItem && ['admin_news', 'admin_announcements', 'admin_devotions', 'admin_events', 'admin_congregation', 'admin_users'].includes(activeTab) && (
         <div className="animate-fade-in max-w-xl mx-auto bg-gray-50/50 border border-gray-100 p-6 rounded-2xl space-y-4">
           <div className="flex items-center justify-between border-b border-gray-100 pb-3">
             <h3 className="font-display font-semibold text-gray-800 text-sm">
@@ -917,7 +917,7 @@ export default function AdminModules({
       )}
 
       {/* LIST VIEWS */}
-      {!editingItem && (
+      {!editingItem && ['admin_news', 'admin_announcements', 'admin_devotions', 'admin_events', 'admin_congregation', 'admin_users'].includes(activeTab) && (
         <div className="space-y-4">
           {/* Kelola Berita List */}
           {activeTab === 'admin_news' && (
@@ -1161,8 +1161,10 @@ export default function AdminModules({
               </div>
             </div>
           )}
+        </div>
+      )}
 
-          {/* Moderasi Komentar */}
+      {/* Moderasi Komentar */}
           {activeTab === 'admin_comments' && (
             <div className="space-y-4">
               <div className="p-3.5 bg-amber-50 text-amber-900 border border-amber-200 rounded-2xl flex items-start gap-2.5">
@@ -2249,8 +2251,6 @@ export default function AdminModules({
               )}
             </div>
           )}
-        </div>
-      )}
     </div>
   );
 }
